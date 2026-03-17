@@ -1,36 +1,47 @@
-**UW HusKey Manager**
+### UW HusKey Manager
 
-This project is a Dockerized password management application developed for the University of Washington cybersecurity program. It is designed to showcase secure storage practices, role-based access controls, and common web vulnerability testing.
+This project is a containerized password management application developed as part of my cybersecurity coursework at the University of Washington. It serves as a practical demonstration of secure software development, role-based access control (RBAC), and defensive programming against common web vulnerabilities.
 
-**Core Components**
+---
 
-The repository is structured to support a full-stack environment using PHP 7.4 and a MySQL database. It utilizes Docker Compose to orchestrate the services, providing an isolated and reproducible setup for development and testing.
+### Project Overview
 
-**Features**
+The **HusKey Manager** is designed to simulate an organizational credential management system. It provides a structured environment to manage sensitive information across different departments while enforcing strict security boundaries.
 
-* Vault Management: Separate vaults for different organizational roles such as Developers, HR, and Executives.
-* Permission Logic: Granular control over user actions including viewing, editing, and ownership of vaults.
-* Account Workflow: Support for user registration requests and administrative approval.
-* Secure Logging: Integration with Monolog and Loggly for external event tracking.
-* Security Testing: A suite of pytest scripts designed to test for vulnerabilities like SQL injection and path traversal.
+* **Role-Based Access Control:** Implements a multi-tiered permission system (Owner, Editor, Viewer) to govern access to departmental vaults.
+* **Security Auditing:** Features a dedicated testing suite to identify and mitigate critical vulnerabilities such as SQL Injection (SQLi) and Path Traversal.
+* **Centralized Logging:** Integrated with Monolog and Loggly for secure, off-site event tracking and system monitoring.
+* **Containerized Architecture:** Built using a microservices approach with PHP 7.4-FPM and MySQL, orchestrated via Docker for environment parity and isolation.
 
-**Setup Instructions**
+---
 
-Begin by cloning the repository to your local machine. Ensure that Docker and Docker Compose are running. Open a terminal in the project root and run the command: docker-compose up --build. Once the containers are healthy, the application will be accessible via your local web server.
+### Technical Architecture
 
-**Directory Layout**
+The application is structured to decouple the presentation layer from the core business logic and database management:
 
-* certs/: Stores root certificates and private keys for the local environment.
-* database/: Contains the SQL scripts used to initialize the database schema and sample roles.
-* php/: Houses the Dockerfile and configuration for the backend PHP-FPM service.
-* pytest/: Includes automated test cases for functional verification and security audits.
-* webapp/: The primary application directory containing PHP files, assets, and dependencies.
+| Component | Responsibility |
+| :--- | :--- |
+| **Backend** | PHP 7.4-FPM handling authentication logic and vault operations. |
+| **Database** | MySQL instance managing RBAC tables and encrypted credential storage. |
+| **Web Server** | Nginx configured for secure request routing and static asset serving. |
+| **Testing** | Automated `pytest` suite for functional and security regression testing. |
 
-**Security Disclaimer**
+---
 
-This application is intended for educational purposes. The initial database setup contains sample cleartext passwords that must be changed before any deployment. It is essential to manage sensitive credentials using environment variables and to verify that your .env file is excluded from version control.
+### Security & Defensive Implementation
 
-**Credits**
+A primary focus of this project was the implementation of defensive security measures:
 
-Alex Lin
-University of Washington
+* **Environment Secret Management:** Sensitive configurations (like Loggly tokens) are managed via environment variables to prevent credential leakage in source control.
+* **SQL Injection Prevention:** Core authentication and database interactions are designed to resist SQLi attacks through parameterized queries and input validation.
+* **Automated Security Scans:** The included testing suite validates the efficacy of security patches against known exploit vectors, ensuring the integrity of the "Remediation" logic.
+* **Access Logging:** All informational and error events are dispatched to a remote logging service, providing an audit trail that is resilient to local system compromise.
+
+---
+
+### Key Directory Structure
+
+* `database/`: SQL schemas and initialization scripts for the RBAC framework.
+* `php/`: Docker configurations for the backend environment.
+* `pytest/`: Comprehensive security and functional test cases.
+* `webapp/`: The core application logic, including vault management and authentication components.
